@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.set('view engine', 'html');
 app.engine('html', ejs.renderFile);
-app.set('port', 5001);
+app.set('port', 3000);
 app.use('/public',static(path.join(__dirname,'public')));
 
 
@@ -132,7 +132,7 @@ app.post('/push_location', function(req, res){
 
 app.get('/get_location',function(req,res){
     console.log('who get in here post /get_location');
-    var query = connection.query('select firstname, longitude, latitude from us_custom', function(err,rows){
+    var query = connection.query('select firstname, location_longitude, location_latitude from us_custom', function(err,rows){
         res.json(rows);
     });    
 });
@@ -160,17 +160,59 @@ app.get('/get_basketball_rank',function(req,res){
 
 app.get('/random_match',function(req,res){
     console.log('who get in here post /random_match');
-    var query = connection.query('select * from rk_basketball', function(err,rows){
-        res.json(rows);
+    var query = connection.query('select firstname from us_custom where status = ?', ['ready'], function(err,rows){
+        res.json(rows[0]);
     });    
+});
+
+app.get('/random_fc',function(req,res){
+    console.log('who get in here post /random_fc');
+    var query = connection.query('select name, location, contact from fc_billiards where availability = ?', ['ok'], function(err,rows){
+        res.json(rows[0]);
+    });    
+});
+
+app.get('/random_partner',function(req,res){
+    console.log('who get in here post /random_partner');
+    var partner_id;
+    async.waterfall([
+        function(callback){
+            connection.query('select account_id  from us_custom where status = ?', ['ready'], function(err,rows){
+                partner_id = rows[0].account_id;
+                callback(null, partner_id);
+            });
+        },
+        function(partner_id, callback){
+            connection.query('select rank, points from rk_billiards where user_account_id = ?', [partner_id], function(err,rows2){
+                console.log(rows2);
+                res.json(rows2);
+            }); 
+        }
+    ]);
+});
+
+app.post('/random_match',function(req,res){
+    console.log('who get in here post /random_match');
+    const id = req.body.account_id;
+    var sqlQuery = "UPDATE us_custom SET ? WHERE account_id = '" + id + "';";
+    var post = {status: ready};
+    function callback(err, result){
+        if(err){
+            console.log("err");
+            throw err;
+        }
+        else{
+            console.log('완료');
+        }
+    }
+    var query = connection.query(sqlQuery, post, callback);  
 });
 
 app.get('/users', function(req, res){
     console.log('who get in here post /users');
-    var query = connection.query('select * from us_custom', function(err,rows){
+    var query = connection.query('select firstname, contact from us_custom', function(err,rows){
         res.json(rows);
-    }); 
-    
+    });  
 });
 http.createServer(app).listen(app.get('port'),function(){
     console.log("express start : %d ", app.get('port'));
