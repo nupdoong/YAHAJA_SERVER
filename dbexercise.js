@@ -1,0 +1,177 @@
+var express = require('express');
+var http = require('http');
+var ejs = require('ejs');
+var static = require('serve-static');
+var path = require('path');
+var fs = require('fs');
+var mysql = require('mysql');
+var bodyParser = require('body-parser');
+var async = require('async');
+
+var connection = mysql.createConnection({
+    host: 'yahajainstance.cseazqbmpvdh.us-east-2.rds.amazonaws.com',
+    port: '3306',
+    user: 'pjw930731',
+    password: 'q15w96e31',
+    database: 'rank',
+    debug: false
+});
+
+var app = express();
+var router = express.Router();
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.set('view engine', 'html');
+app.engine('html', ejs.renderFile);
+app.set('port', 5001);
+app.use('/public',static(path.join(__dirname,'public')));
+
+
+app.get('/login', function(req, res, next) {
+    const id = req.query.account_id
+    const password = req.query.account_pw;
+    console.log('who get in here post /login');
+    var query = connection.query('select * from us_custom where account_id = ?',[id], function(err,rows2){
+        if(rows2.length > 0){
+            if(rows2[0].account_pw == password){
+                res.end(JSON.stringify(rows2));
+            }
+            else{
+                res.end("Fail to Login... Wrong Password");
+            }
+
+        }
+        else{
+            res.end("Fail to Login... Sign up first Please");
+        }
+        
+    });
+});
+
+app.post('/signup', function(req, res, next) {
+    console.log('who get in here post /signup');
+    const id = req.body.account_id;
+    const password = req.body.account_pw;
+    const sex = req.body.sex;
+    const register_date = req.body.register_date;
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    const contact = req.body.contact;
+   
+    var id_size = id.length;
+    var id_dup = 0;
+    var password_size = password.length;
+ 
+    var sqlQuery = "INSERT INTO us_custom SET ?";
+    var post = {account_id: id, account_pw: password, sex: sex, register_date: null, firstname: firstname, lastname: lastname, contact: contact, status: 'normal', clan: null, location_longitude: null, location_latitude: null};
+    
+    async.waterfall([
+        function(callback){
+            connection.query('SELECT account_id from us_custom', function(err, rows, fields){
+                if (!err){
+                    for(var i = 0; i < rows.length; i++)
+                    {
+                        if(rows[i].id == id){
+                            id_dup = 1;                    
+                        }
+                    }
+                    callback(null, id_dup);
+
+                }
+                else
+                    console.log('Error while performing Query.', err);
+            });
+            
+        },
+        function(id_dup, callback){
+            console.log(id_dup);
+            if((id_size > 10) || (id_size == 0) || (password_size < 4) || (password_size == 0)){
+                res.end("Please retry sign in. You entered inappropriate information");
+            }
+            else{
+                if(id_dup == 1){
+                    res.end("There is already same ID.");
+                }
+                else{
+                    function callback(err, result){
+                        if(err){
+                            console.log(err);
+                        }
+                    }
+                    var query = connection.query(sqlQuery, post, callback);
+                    console.log("Insert Complete!");
+                    res.end(JSON.stringify());
+                }
+            }
+            
+        }
+        
+    ]);
+});
+
+app.post('/push_location', function(req, res){
+    const id = req.body.account_id;
+    const latitude = req.body.location_latitude;
+    const longitude = req.body.location_longitude;
+    console.log('who get in here post /push_location');
+    var sqlQuery = "UPDATE us_custom SET ? WHERE account_id = '" + id + "';";
+    var post = {location_latitude: latitude, location_longitude: longitude};
+    function callback(err, result){
+                    if(err){
+                        console.log("err");
+                        throw err;
+                    }
+                    else{
+                        console.log('완료');
+                    }
+                }
+                var query = connection.query(sqlQuery, post, callback);
+    
+});
+
+app.get('/get_location',function(req,res){
+    console.log('who get in here post /get_location');
+    var query = connection.query('select firstname, longitude, latitude from us_custom', function(err,rows){
+        res.json(rows);
+    });    
+});
+
+app.get('/get_billiards_rank',function(req,res){
+    console.log('who get in here post /get_rank');
+    var query = connection.query('select * from rk_billiards', function(err,rows){
+        res.json(rows);
+    });    
+});
+
+app.get('/get_bowling_rank',function(req,res){
+    console.log('who get in here post /get_rank');
+    var query = connection.query('select * from rk_bowling', function(err,rows){
+        res.json(rows);
+    });    
+});
+
+app.get('/get_basketball_rank',function(req,res){
+    console.log('who get in here post /get_rank');
+    var query = connection.query('select * from rk_basketball', function(err,rows){
+        res.json(rows);
+    });    
+});
+
+app.get('/random_match',function(req,res){
+    console.log('who get in here post /random_match');
+    var query = connection.query('select * from rk_basketball', function(err,rows){
+        res.json(rows);
+    });    
+});
+
+app.get('/users', function(req, res){
+    console.log('who get in here post /users');
+    var query = connection.query('select * from us_custom', function(err,rows){
+        res.json(rows);
+    }); 
+    
+});
+http.createServer(app).listen(app.get('port'),function(){
+    console.log("express start : %d ", app.get('port'));
+});
