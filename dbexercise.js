@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.set('view engine', 'html');
 app.engine('html', ejs.renderFile);
-app.set('port', 3000);
+app.set('port', 5001);
 app.use('/public',static(path.join(__dirname,'public')));
 
 
@@ -38,12 +38,12 @@ app.get('/login', function(req, res, next) {
                 res.end(JSON.stringify(rows2));
             }
             else{
-                res.end("Fail to Login... Wrong Password");
+                res.end(JSON.stringify());
             }
 
         }
         else{
-            res.end("Fail to Login... Sign up first Please");
+            res.end(JSON.stringify());
         }
         
     });
@@ -65,6 +65,8 @@ app.post('/signup', function(req, res, next) {
  
     var sqlQuery = "INSERT INTO us_custom SET ?";
     var post = {account_id: id, account_pw: password, sex: sex, register_date: null, firstname: firstname, lastname: lastname, contact: contact, status: 'normal', clan: null, location_longitude: null, location_latitude: null};
+    var sqlQuery2 = "INSERT INTO rk_billiards SET ?";
+    var post2 = {user_account_id: id, points: 1000, rank: null};
     
     async.waterfall([
         function(callback){
@@ -98,6 +100,9 @@ app.post('/signup', function(req, res, next) {
                         if(err){
                             console.log(err);
                         }
+                        else{
+                            var query2 = connection.query(sqlQuery2, post2);
+                        }
                     }
                     var query = connection.query(sqlQuery, post, callback);
                     console.log("Insert Complete!");
@@ -118,15 +123,16 @@ app.post('/push_location', function(req, res){
     var sqlQuery = "UPDATE us_custom SET ? WHERE account_id = '" + id + "';";
     var post = {location_latitude: latitude, location_longitude: longitude};
     function callback(err, result){
-                    if(err){
-                        console.log("err");
-                        throw err;
-                    }
-                    else{
-                        console.log('완료');
-                    }
-                }
-                var query = connection.query(sqlQuery, post, callback);
+            if(err){
+                    console.log("err");
+                    throw err;
+            }
+            else{
+                    console.log('완료');
+                    res.end(JSON.stringify());
+            }
+    }
+    var query = connection.query(sqlQuery, post, callback);
     
 });
 
@@ -139,7 +145,7 @@ app.get('/get_location',function(req,res){
 
 app.get('/get_billiards_rank',function(req,res){
     console.log('who get in here post /get_rank');
-    var query = connection.query('select * from rk_billiards', function(err,rows){
+    var query = connection.query('select * from rk_billiards ORDER BY points DESC', function(err,rows){
         res.json(rows);
     });    
 });
@@ -195,7 +201,7 @@ app.post('/random_match',function(req,res){
     console.log('who get in here post /random_match');
     const id = req.body.account_id;
     var sqlQuery = "UPDATE us_custom SET ? WHERE account_id = '" + id + "';";
-    var post = {status: ready};
+    var post = {status: 'ready'};
     function callback(err, result){
         if(err){
             console.log("err");
@@ -203,6 +209,25 @@ app.post('/random_match',function(req,res){
         }
         else{
             console.log('완료');
+            res.end(JSON.stringify());
+        }
+    }
+    var query = connection.query(sqlQuery, post, callback);  
+});
+
+app.post('/match_result',function(req,res){
+    console.log('who get in here post /match_result');
+    const id = req.body.account_id;
+    var sqlQuery = "UPDATE rk_billiards SET ? WHERE user_account_id = '" + id + "';";
+    var post = {points: points + 10};
+    function callback(err, result){
+        if(err){
+            console.log("err");
+            throw err;
+        }
+        else{
+            console.log('완료');
+            res.end(JSON.stringify());
         }
     }
     var query = connection.query(sqlQuery, post, callback);  
@@ -210,9 +235,15 @@ app.post('/random_match',function(req,res){
 
 app.get('/users', function(req, res){
     console.log('who get in here post /users');
-    var query = connection.query('select firstname, contact from us_custom', function(err,rows){
+    var query = connection.query('select * from us_custom', function(err,rows){
         res.json(rows);
-    });  
+    });
+});
+app.get('/users', function(req, res){
+    console.log('who get in here post /clans');
+    var query = connection.query('select * from cm_clan', function(err,rows){
+        res.json(rows);
+    });
 });
 http.createServer(app).listen(app.get('port'),function(){
     console.log("express start : %d ", app.get('port'));
