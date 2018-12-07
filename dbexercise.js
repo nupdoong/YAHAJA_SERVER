@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.set('view engine', 'html');
 app.engine('html', ejs.renderFile);
-app.set('port', 5001);
+app.set('port', 3000);
 app.use('/public',static(path.join(__dirname,'public')));
 
 
@@ -138,7 +138,7 @@ app.post('/push_location', function(req, res){
 
 app.get('/get_location',function(req,res){
     console.log('who get in here post /get_location');
-    var query = connection.query('select firstname, location_longitude, location_latitude from us_custom', function(err,rows){
+    var query = connection.query('select account_id, firstname, location_longitude, location_latitude from us_custom', function(err,rows){
         res.json(rows);
     });    
 });
@@ -184,6 +184,7 @@ app.get('/random_partner',function(req,res){
     async.waterfall([
         function(callback){
             connection.query('select account_id  from us_custom where status = ?', ['ready'], function(err,rows){
+                var row_row;
                 partner_id = rows[0].account_id;
                 callback(null, partner_id);
             });
@@ -233,13 +234,20 @@ app.post('/match_result',function(req,res){
     var query = connection.query(sqlQuery, post, callback);  
 });
 
+app.get('/get_billiards_rank_clan', function(req, res){
+    console.log('who get in here post /clan_rank');
+    var query = connection.query('select clan_name, points from cm_clan', function(err,rows){
+        res.json(rows);
+    });
+});
+
 app.get('/users', function(req, res){
     console.log('who get in here post /users');
     var query = connection.query('select * from us_custom', function(err,rows){
         res.json(rows);
     });
 });
-app.get('/users', function(req, res){
+app.get('/clans', function(req, res){
     console.log('who get in here post /clans');
     var query = connection.query('select * from cm_clan', function(err,rows){
         res.json(rows);
