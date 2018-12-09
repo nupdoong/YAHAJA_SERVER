@@ -1,4 +1,5 @@
 var express = require('express');
+var alert = require('alert-node');
 var http = require('http');
 var ejs = require('ejs');
 var static = require('serve-static');
@@ -380,6 +381,10 @@ app.post('/users_m', function(req, res){
                 res.write("<h4 style='margin-left : 15px;'>Last Name : " + rows[i].lastname + "</h4>");
                 res.write("<h4 style='margin-left : 15px;'>Contact : " + rows[i].contact + "</h4>");
                 res.write("<br>")
+                res.write("<form method = 'post' action='/del_user'>");
+                res.write("<input type = 'submit' value = 'Delete' class='right' name = ''>");
+                res.write("</form>");
+                res.write("</div>");
                 res.write("</div>");
                 res.write("</div>");
                 res.write("</section>");
@@ -486,6 +491,9 @@ app.post('/facility_m', function(req, res){
                 res.write("<h4 style='margin-left : 15px;'>Loc : " + rows[i].location + "</h4>");
                 res.write("<h4 style='margin-left : 15px;'>Contact : " + rows[i].contact + "</h4>");
                 res.write("<br>")
+                res.write("<form method = 'post' action='/del_user'>");
+                res.write("<input type = 'submit' value = 'Delete' class='right' name = ''>");
+                res.write("</form>");
                 res.write("</div>");
                 res.write("</div>");
                 res.write("</section>");
@@ -593,6 +601,9 @@ app.post('/clan_m', function(req, res){
                 res.write("<h4 style='margin-left : 15px;'>Clan Type : " + rows[i].type + "</h4>");
                 res.write("<h4 style='margin-left : 15px;'>Established : " + rows[i].established + "</h4>");
                 res.write("<br>")
+                res.write("<form method = 'post' action='/del_user'>");
+                res.write("<input type = 'submit' value = 'Delete' class='right' name = ''>");
+                res.write("</form>");
                 res.write("</div>");
                 res.write("</div>");
                 res.write("</section>");
@@ -608,6 +619,14 @@ app.post('/clan_m', function(req, res){
         else
             console.log('Error while performing Query.', err);
     });
+});
+
+app.post('/del_user', function(req, res){
+        
+
+    alert('Delete Complete.');
+
+          
 });
 
 http.createServer(app).listen(app.get('port'),function(){
