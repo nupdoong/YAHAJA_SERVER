@@ -27,6 +27,9 @@ app.engine('html', ejs.renderFile);
 app.set('port', 3000);
 app.use('/public',static(path.join(__dirname,'public')));
 
+app.get('/first', function(req, res, next) {
+    res.render('top_manage_first.html');
+});
 
 app.get('/login', function(req, res, next) {
     const id = req.query.account_id
@@ -237,6 +240,14 @@ app.post('/match_result',function(req,res){
 app.get('/get_billiards_rank_clan', function(req, res){
     console.log('who get in here post /clan_rank');
     var query = connection.query('select clan_name, points from cm_clan', function(err,rows){
+        res.json(rows);
+    });
+});
+
+app.get('/find_clan', function(req, res){
+    console.log('who get in here post /clan_rank');
+    const id = req.body.account_id;
+    var query = connection.query('select clan from us_custom where account_id = ?',[id] ,function(err,rows){
         res.json(rows);
     });
 });
