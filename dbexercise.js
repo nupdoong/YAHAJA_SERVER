@@ -324,7 +324,7 @@ app.get('/find_match',function(req,res){
     const id = req.query.account_id;
     console.log('who get in here post /random_match');
     var query = connection.query('select * from mc_progress where match_member1 = ? OR match_member2 = ?', [id, id], function(err,rows){
-        res.json(rows[0]);
+        res.json(rows);
     });    
 });
 
@@ -332,7 +332,7 @@ app.get('/fc_info',function(req,res){
     const name = req.query.name;
     console.log('who get in here post /random_fc');
     var query = connection.query('select * from fc_billiards where name = ?', [name], function(err,rows){
-        res.json(rows[0]);
+        res.json(rows);
     });    
 });
 
@@ -340,7 +340,7 @@ app.get('/partner_contact',function(req,res){
     const partner_id = req.query.partner_id;
     console.log('who get in here post /random_fc');
     var query = connection.query('select * from us_custom where account_id = ?', [partner_id], function(err,rows){
-        res.json(rows[0]);
+        res.json(rows);
     });    
 });
 
@@ -348,7 +348,7 @@ app.get('/partner_points',function(req,res){
     const partner_id = req.query.partner_id;
     console.log('who get in here post /random_fc');
     var query = connection.query('select * from rk_billiards where user_account_id = ?', [partner_id], function(err,rows){
-        res.json(rows[0]);
+        res.json(rows);
     });    
 });
 
