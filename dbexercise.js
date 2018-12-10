@@ -204,6 +204,7 @@ app.post('/push_location', function(req, res){
     const serverKey = 'AIzaSyDZF3zh-0_PmYHKxEprFrx4V8AXKB_dQkk';
     const client_token = 'eevOFcMBiDo:APA91bEvv17po1we6KBKpk7bPT8V6T63krcAlgW38AA0zmxgisFZdPLPgEiDs2oxJ1VkrXZebOMBaI46jBidconShgMJg7PG1nTwGCrnU';
     console.log('who get in here post /push_location');
+    var fcm = new FCM(serverKey);
     var push_data = {
         // 수신대상
         to: client_token,
@@ -235,7 +236,6 @@ app.post('/push_location', function(req, res){
             }
             else{
                     console.log('완료');
-                    var fcm = new FCM(serverKey);
 
                     fcm.send(push_data, function(err, response) {
                         if (err) {
