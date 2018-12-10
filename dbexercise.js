@@ -80,6 +80,26 @@ app.get('/login', function(req, res, next) {
     });
 });
 
+app.post('/login_fcm', function(req, res, next) {
+    const id = req.body.account_id
+    const fcm_token = req.body.fcm_token;
+    console.log('who get in here post /login');
+    var sqlQuery = "UPDATE us_custom SET ? WHERE account_id = '" + id + "';";
+    var post = {fcm_token: fcm_token};
+    function callback(err, result){
+        if(err){
+            console.log("err");
+            throw err;
+        }
+        else{
+            console.log('완료');
+            res.end(JSON.stringify());
+        }
+    }
+    var query = connection.query(sqlQuery, post, callback);  
+    
+});
+
 app.post('/signup2', function(req, res, next) {
     console.log('who get in here post /signup');
     const clan_name = req.body.clan_name;
@@ -281,7 +301,7 @@ app.get('/random_match',function(req,res){
 
 app.get('/random_fc',function(req,res){
     console.log('who get in here post /random_fc');
-    var query = connection.query('select name, location, contact from fc_billiards where availability = ?', ['ok'], function(err,rows){
+    var query = connection.query('select name, lat, lon, contact from fc_billiards where availability = ?', ['ok'], function(err,rows){
         res.json(rows[0]);
     });    
 });
