@@ -204,9 +204,9 @@ app.post('/push_location', function(req, res){
     const serverKey = 'AIzaSyDZF3zh-0_PmYHKxEprFrx4V8AXKB_dQkk';
     const client_token = 'eevOFcMBiDo:APA91bEvv17po1we6KBKpk7bPT8V6T63krcAlgW38AA0zmxgisFZdPLPgEiDs2oxJ1VkrXZebOMBaI46jBidconShgMJg7PG1nTwGCrnU';
     console.log('who get in here post /push_location');
-    var fcm = new FCM(serverKey);
+    var fcm = new FCM('AIzaSyDZF3zh-0_PmYHKxEprFrx4V8AXKB_dQkk');
     var push_data = {
-        to: client_token,
+        to: 'eevOFcMBiDo:APA91bEvv17po1we6KBKpk7bPT8V6T63krcAlgW38AA0zmxgisFZdPLPgEiDs2oxJ1VkrXZebOMBaI46jBidconShgMJg7PG1nTwGCrnU',
         notification: {
             title: "Hello Node",
             body: "Node로 발송하는 Push 메시지 입니다.",
