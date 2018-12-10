@@ -8,6 +8,7 @@ var fs = require('fs');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var async = require('async');
+var FCM = require('fcm-node');
 
 var connection = mysql.createConnection({
     host: 'yahajainstance.cseazqbmpvdh.us-east-2.rds.amazonaws.com',
@@ -27,6 +28,9 @@ app.set('view engine', 'html');
 app.engine('html', ejs.renderFile);
 app.set('port', 3000);
 app.use('/public',static(path.join(__dirname,'public')));
+
+var serverKey = 'AIzaSyDZF3zh-0_PmYHKxEprFrx4V8AXKB_dQkk';
+var client_token = 'eevOFcMBiDo:APA91bEvv17po1we6KBKpk7bPT8V6T63krcAlgW38AA0zmxgisFZdPLPgEiDs2oxJ1VkrXZebOMBaI46jBidconShgMJg7PG1nTwGCrnU';
 
 app.get('/first', function(req, res, next) {
     res.render('top_manage_first.html');
@@ -111,7 +115,7 @@ app.post('/signup2', function(req, res, next) {
         function(id_dup, callback){
             console.log(id_dup);
                 if(id_dup == 1){
-                    res.end("There is already same ID.");
+                    res.end("There is already same name clan.");
                 }
                 else{
                     function callback(err, result){
@@ -200,6 +204,28 @@ app.post('/push_location', function(req, res){
     const latitude = req.body.location_latitude;
     const longitude = req.body.location_longitude;
     console.log('who get in here post /push_location');
+    var push_data = {
+        // 수신대상
+        to: client_token,
+        // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
+        notification: {
+            title: "Hello Node",
+            body: "Node로 발송하는 Push 메시지 입니다.",
+            sound: "default",
+            click_action: "FCM_PLUGIN_ACTIVITY",
+            icon: "fcm_push_icon"
+        },
+        // 메시지 중요도
+        priority: "high",
+        // App 패키지 이름
+        restricted_package_name: "study.cordova.fcmclient",
+        // App에게 전달할 데이터
+        data: {
+            num1: 2000,
+            num2: 3000
+        }
+    };
+
     var sqlQuery = "UPDATE us_custom SET ? WHERE account_id = '" + id + "';";
     var post = {location_latitude: latitude, location_longitude: longitude};
     function callback(err, result){
@@ -209,6 +235,18 @@ app.post('/push_location', function(req, res){
             }
             else{
                     console.log('완료');
+                    var fcm = new FCM(serverKey);
+
+                    fcm.send(push_data, function(err, response) {
+                        if (err) {
+                            console.error('Push메시지 발송에 실패했습니다.');
+                            console.error(err);
+                            return;
+                        }
+
+                        console.log('Push메시지가 발송되었습니다.');
+                        console.log(response);
+                    });
                     res.end(JSON.stringify());
             }
     }
