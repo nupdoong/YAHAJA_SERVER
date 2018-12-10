@@ -421,6 +421,8 @@ app.get('/match_result_lose',function(req,res){
         }
         else{
             console.log('완료');
+                        console.log(id);
+
             res.end(JSON.stringify());
         }
     }
@@ -438,6 +440,7 @@ app.get('/match_result',function(req,res){
         }
         else{
             console.log('완료');
+            console.log(id);
             res.end(JSON.stringify());
         }
     }
