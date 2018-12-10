@@ -78,6 +78,58 @@ app.get('/login', function(req, res, next) {
     });
 });
 
+app.post('/signup2', function(req, res, next) {
+    console.log('who get in here post /signup');
+    const clan_name = req.body.clan_name;
+    const type = req.body.clan_type;
+    const clan_master = req.body.clan_master;
+    const introduction = req.body.clan_introduction;
+   
+    var id_size = id.length;
+    var id_dup = 0;
+    var password_size = password.length;
+ 
+    var sqlQuery = "INSERT INTO cm_clan SET ?";
+    var post = {clan_name: clan_name, clan_master: clan_master, clan_member: clan_master, introduction: introduction, type: type, points: 1000, established: null};
+    
+    async.waterfall([
+        function(callback){
+            connection.query('SELECT clan_name from cm_clan', function(err, rows, fields){
+                if (!err){
+                    for(var i = 0; i < rows.length; i++)
+                    {
+                        if(rows[i].id == id){
+                            id_dup = 1;                    
+                        }
+                    }
+                    callback(null, id_dup);
+
+                }
+                else
+                    console.log('Error while performing Query.', err);
+            });
+            
+        },
+        function(id_dup, callback){
+            console.log(id_dup);
+                if(id_dup == 1){
+                    res.end("There is already same ID.");
+                }
+                else{
+                    function callback(err, result){
+                        if(err){
+                            console.log(err);
+                        }
+                    }
+                    var query = connection.query(sqlQuery, post, callback);
+                    console.log("Insert Complete!");
+                    res.end(JSON.stringify());
+                }
+        }
+        
+    ]);
+});
+
 app.post('/signup', function(req, res, next) {
     console.log('who get in here post /signup');
     const id = req.body.account_id;
@@ -143,6 +195,7 @@ app.post('/signup', function(req, res, next) {
         
     ]);
 });
+
 
 app.post('/push_location', function(req, res){
     const id = req.body.account_id;
@@ -272,7 +325,7 @@ app.get('/get_billiards_rank_clan', function(req, res){
 
 app.get('/find_clan', function(req, res){
     console.log('who get in here post /clan_rank');
-    const id = req.body.account_id;
+    const id = req.query.account_id;
     var query = connection.query('select clan from us_custom where account_id = ?',[id] ,function(err,rows){
         res.json(rows);
     });
