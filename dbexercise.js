@@ -292,6 +292,37 @@ app.get('/get_basketball_rank',function(req,res){
     });    
 });
 
+app.get('/random_matching', function(req, res){
+    const id = req.query.account_id;
+    
+    var partner_id;
+    var match_place;
+    
+    var sqlQuery = "INSERT INTO mc_progress SET ?";
+    
+    async.waterfall([
+        function(callback){
+            connection.query('select account_id  from us_custom where status = ?', ['ready'], function(err,rows){
+                partner_id = rows[0].account_id;
+                callback(null);
+            });
+        },
+        function(callback){
+            connection.query('select name from fc_billiards where availability = ?', ['ok'], function(err,rows2){
+                match_place = roww2[0].name;
+                callback(null);
+            }); 
+        },
+        function(callback){
+            var post = {match_type : 'billiards', match_status : 'ready', match_member1 : id, match_member2 : partner_id, match_place : match_place};
+            var query = connection.query(sqlQuery, post);
+        }
+    ]);
+    
+    
+    
+});
+
 app.get('/random_match',function(req,res){
     console.log('who get in here post /random_match');
     var query = connection.query('select account_id from us_custom where status = ?', ['ready'], function(err,rows){
@@ -312,7 +343,6 @@ app.get('/random_partner',function(req,res){
     async.waterfall([
         function(callback){
             connection.query('select account_id  from us_custom where status = ?', ['ready'], function(err,rows){
-                var row_row;
                 partner_id = rows[0].account_id;
                 callback(null, partner_id);
             });
