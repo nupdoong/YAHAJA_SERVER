@@ -212,19 +212,10 @@ app.post('/push_location', function(req, res){
         notification: {
             title: "Hello Node",
             body: "Node로 발송하는 Push 메시지 입니다.",
-            sound: "default",
-            click_action: "FCM_PLUGIN_ACTIVITY",
-            icon: "fcm_push_icon"
         },
         // 메시지 중요도
         priority: "high",
         // App 패키지 이름
-        restricted_package_name: "project.capstone.sw.yahaja.service",
-        // App에게 전달할 데이터
-        data: {
-            num1: 2000,
-            num2: 3000
-        }
     };
 
     var sqlQuery = "UPDATE us_custom SET ? WHERE account_id = '" + id + "';";
