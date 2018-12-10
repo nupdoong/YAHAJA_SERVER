@@ -370,6 +370,29 @@ app.post('/random_match',function(req,res){
     var query = connection.query(sqlQuery, post, callback);  
 });
 
+app.post('/custom_match',function(req,res){
+    console.log('who get in here post /custom_match');
+    const id = req.body.account_id;
+    
+    const partner_id = req.body.partner_id;
+    var match_place;
+    
+    var sqlQuery = "INSERT INTO mc_progress SET ?";
+    
+    async.waterfall([
+        function(callback){
+            connection.query('select name from fc_billiards where availability = ?', ['ok'], function(err,rows2){
+                match_place = rows2[0].name;
+                callback(null);
+            }); 
+        },
+        function(callback){
+            var post = {match_type : 'billiards', match_status : 'ready', match_member1 : id, match_member2 : partner_id, match_place : match_place};
+            var query = connection.query(sqlQuery, post);
+        }
+    ]);
+});
+
 app.post('/match_result',function(req,res){
     console.log('who get in here post /match_result');
     const id = req.body.account_id;
