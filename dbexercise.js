@@ -294,7 +294,7 @@ app.get('/get_basketball_rank',function(req,res){
 
 app.get('/random_match',function(req,res){
     console.log('who get in here post /random_match');
-    var query = connection.query('select firstname from us_custom where status = ?', ['ready'], function(err,rows){
+    var query = connection.query('select account_id from us_custom where status = ?', ['ready'], function(err,rows){
         res.json(rows[0]);
     });    
 });
@@ -318,7 +318,7 @@ app.get('/random_partner',function(req,res){
             });
         },
         function(partner_id, callback){
-            connection.query('select rank, points from rk_billiards where user_account_id = ?', [partner_id], function(err,rows2){
+            connection.query('select points from rk_billiards where user_account_id = ?', [partner_id], function(err,rows2){
                 console.log(rows2);
                 res.json(rows2);
             }); 
