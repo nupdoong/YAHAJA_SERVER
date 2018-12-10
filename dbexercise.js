@@ -394,9 +394,9 @@ app.post('/custom_match',function(req,res){
     ]);
 });
 
-app.post('/match_result',function(req,res){
+app.get('/match_result_win',function(req,res){
     console.log('who get in here post /match_result');
-    const id = req.body.account_id;
+    const id = req.query.account_id;
     var sqlQuery = "UPDATE rk_billiards SET ? WHERE user_account_id = '" + id + "';";
     var post = {points: points + 10};
     function callback(err, result){
@@ -410,6 +410,40 @@ app.post('/match_result',function(req,res){
         }
     }
     var query = connection.query(sqlQuery, post, callback);  
+});
+app.get('/match_result_lose',function(req,res){
+    console.log('who get in here post /match_result');
+    const id = req.query.account_id;
+    var sqlQuery = "UPDATE rk_billiards SET ? WHERE user_account_id = '" + id + "';";
+    var post = {points: points - 10};
+    function callback(err, result){
+        if(err){
+            console.log("err");
+            throw err;
+        }
+        else{
+            console.log('완료');
+            res.end(JSON.stringify());
+        }
+    }
+    var query = connection.query(sqlQuery, post, callback);  
+});
+
+app.get('/match_result',function(req,res){
+    console.log('who get in here post /match_result');
+    const id = req.query.account_id;
+    var sqlQuery = "Delete from mc_progress WHERE match_member1 = '" + id + "' or match_member2 = '" + id + "';";
+    function callback(err, result){
+        if(err){
+            console.log("err");
+            throw err;
+        }
+        else{
+            console.log('완료');
+            res.end(JSON.stringify());
+        }
+    }
+    var query = connection.query(sqlQuery, callback);  
 });
 
 app.get('/get_billiards_rank_clan', function(req, res){
