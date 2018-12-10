@@ -85,9 +85,7 @@ app.post('/signup2', function(req, res, next) {
     const clan_master = req.body.clan_master;
     const introduction = req.body.clan_introduction;
    
-    var id_size = id.length;
     var id_dup = 0;
-    var password_size = password.length;
  
     var sqlQuery = "INSERT INTO cm_clan SET ?";
     var post = {clan_name: clan_name, clan_master: clan_master, clan_member: clan_master, introduction: introduction, type: type, points: 1000, established: null};
@@ -98,7 +96,7 @@ app.post('/signup2', function(req, res, next) {
                 if (!err){
                     for(var i = 0; i < rows.length; i++)
                     {
-                        if(rows[i].id == id){
+                        if(rows[i].clan_name == clan_name){
                             id_dup = 1;                    
                         }
                     }
