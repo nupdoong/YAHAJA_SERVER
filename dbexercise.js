@@ -227,7 +227,7 @@ app.post('/push_location', function(req, res){
             else{
                     console.log('완료');
 
-                    fcm.send(push_data, function(err, response) {
+                    /*fcm.send(push_data, function(err, response) {
                         if (err) {
                             console.error('Push메시지 발송에 실패했습니다.');
                             console.error(err);
@@ -236,7 +236,7 @@ app.post('/push_location', function(req, res){
 
                         console.log('Push메시지가 발송되었습니다.');
                         console.log(response);
-                    });
+                    });*/
                     res.end(JSON.stringify());
             }
     }
