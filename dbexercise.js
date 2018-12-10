@@ -309,7 +309,7 @@ app.get('/random_matching', function(req, res){
         },
         function(callback){
             connection.query('select name from fc_billiards where availability = ?', ['ok'], function(err,rows2){
-                match_place = roww2[0].name;
+                match_place = rows2[0].name;
                 callback(null);
             }); 
         },
