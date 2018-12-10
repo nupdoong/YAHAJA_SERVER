@@ -29,8 +29,6 @@ app.engine('html', ejs.renderFile);
 app.set('port', 3000);
 app.use('/public',static(path.join(__dirname,'public')));
 
-var serverKey = 'AIzaSyDZF3zh-0_PmYHKxEprFrx4V8AXKB_dQkk';
-var client_token = 'eevOFcMBiDo:APA91bEvv17po1we6KBKpk7bPT8V6T63krcAlgW38AA0zmxgisFZdPLPgEiDs2oxJ1VkrXZebOMBaI46jBidconShgMJg7PG1nTwGCrnU';
 
 app.get('/first', function(req, res, next) {
     res.render('top_manage_first.html');
@@ -203,6 +201,8 @@ app.post('/push_location', function(req, res){
     const id = req.body.account_id;
     const latitude = req.body.location_latitude;
     const longitude = req.body.location_longitude;
+    const serverKey = 'AIzaSyDZF3zh-0_PmYHKxEprFrx4V8AXKB_dQkk';
+    const client_token = 'eevOFcMBiDo:APA91bEvv17po1we6KBKpk7bPT8V6T63krcAlgW38AA0zmxgisFZdPLPgEiDs2oxJ1VkrXZebOMBaI46jBidconShgMJg7PG1nTwGCrnU';
     console.log('who get in here post /push_location');
     var push_data = {
         // 수신대상
