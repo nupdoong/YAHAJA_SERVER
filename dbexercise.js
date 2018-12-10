@@ -206,16 +206,12 @@ app.post('/push_location', function(req, res){
     console.log('who get in here post /push_location');
     var fcm = new FCM(serverKey);
     var push_data = {
-        // 수신대상
         to: client_token,
-        // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
         notification: {
             title: "Hello Node",
             body: "Node로 발송하는 Push 메시지 입니다.",
-        },
-        // 메시지 중요도
-        priority: "high",
-        // App 패키지 이름
+        }
+
     };
 
     var sqlQuery = "UPDATE us_custom SET ? WHERE account_id = '" + id + "';";
