@@ -218,7 +218,7 @@ app.post('/push_location', function(req, res){
         // 메시지 중요도
         priority: "high",
         // App 패키지 이름
-        restricted_package_name: "study.cordova.fcmclient",
+        restricted_package_name: "project.capstone.sw.yahaja.service",
         // App에게 전달할 데이터
         data: {
             num1: 2000,
