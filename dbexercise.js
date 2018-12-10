@@ -213,17 +213,7 @@ app.post('/push_location', function(req, res){
             sound: "default",
             click_action: "FCM_PLUGIN_ACTIVITY",
             icon: "fcm_push_icon"
-        },
-        
-        priority: "high",
-        // App 패키지 이름
-        restricted_package_name: "project.capstone.sw.yahaja.service",
-        
-        data: {
-            num1: 2000,
-            num2: 3000
         }
-        
 
     };
 
