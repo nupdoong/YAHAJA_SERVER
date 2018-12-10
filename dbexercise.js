@@ -413,7 +413,7 @@ app.get('/match_result_win',function(req,res){
 app.get('/match_result_lose',function(req,res){
     console.log('who get in here post /match_result');
     const id = req.query.account_id;
-    var sqlQuery = "UPDATE rk_billiards SET points=poins-10 WHERE user_account_id = '" + id + "';";
+    var sqlQuery = "UPDATE rk_billiards SET points=points-10 WHERE user_account_id = '" + id + "';";
     function callback(err, result){
         if(err){
             console.log("err");
