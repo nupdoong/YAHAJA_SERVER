@@ -318,42 +318,38 @@ app.get('/random_matching', function(req, res){
             var query = connection.query(sqlQuery, post);
         }
     ]);
-    
-    
-    
 });
 
-app.get('/random_match',function(req,res){
+app.get('/find_match',function(req,res){
+    const id = req.query.account_id;
     console.log('who get in here post /random_match');
-    var query = connection.query('select account_id from us_custom where status = ?', ['ready'], function(err,rows){
+    var query = connection.query('select * from mc_progress where match_member1 = ? OR match_member2 = ?', [id, id], function(err,rows){
         res.json(rows[0]);
     });    
 });
 
-app.get('/random_fc',function(req,res){
+app.get('/fc_info',function(req,res){
+    const name = req.query.name;
     console.log('who get in here post /random_fc');
-    var query = connection.query('select name, lat, lon, contact from fc_billiards where availability = ?', ['ok'], function(err,rows){
+    var query = connection.query('select * from fc_billiards where name = ?', [name], function(err,rows){
         res.json(rows[0]);
     });    
 });
 
-app.get('/random_partner',function(req,res){
-    console.log('who get in here post /random_partner');
-    var partner_id;
-    async.waterfall([
-        function(callback){
-            connection.query('select account_id  from us_custom where status = ?', ['ready'], function(err,rows){
-                partner_id = rows[0].account_id;
-                callback(null, partner_id);
-            });
-        },
-        function(partner_id, callback){
-            connection.query('select points from rk_billiards where user_account_id = ?', [partner_id], function(err,rows2){
-                console.log(rows2);
-                res.json(rows2);
-            }); 
-        }
-    ]);
+app.get('/partner_contact',function(req,res){
+    const partner_id = req.query.partner_id;
+    console.log('who get in here post /random_fc');
+    var query = connection.query('select * from us_custom where account_id = ?', [partner_id], function(err,rows){
+        res.json(rows[0]);
+    });    
+});
+
+app.get('/partner_points',function(req,res){
+    const partner_id = req.query.partner_id;
+    console.log('who get in here post /random_fc');
+    var query = connection.query('select * from rk_billiards where user_account_id = ?', [partner_id], function(err,rows){
+        res.json(rows[0]);
+    });    
 });
 
 app.post('/random_match',function(req,res){
