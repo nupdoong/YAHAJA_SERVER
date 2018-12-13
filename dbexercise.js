@@ -51,12 +51,14 @@ app.post('/login_m', function(req, res, next) {
                 res.render('post.html');
             }
             else{
-                res.end(JSON.stringify());
+                res.write('<script>alert("Wrong Password. Check your password")</script>');
+                res.write('<script language=\"javascript\">window.location=\"http://ec2-13-59-95-38.us-east-2.compute.amazonaws.com:3000/first\"</script>');
             }
 
         }
         else{
-            res.end(JSON.stringify());
+            res.write('<script>alert("Wrong ID. Check your ID")</script>');
+            res.write('<script language=\"javascript\">window.location=\"http://ec2-13-59-95-38.us-east-2.compute.amazonaws.com:3000/first\"</script>');
         }
         
     });
@@ -822,6 +824,7 @@ app.post('/del_user', function(req, res){
                         throw err;
                     }
                     else{
+                        res.write('<script>alert("Delete Complete!")</script>');
                         res.render('post.html');
                     }
                 }
