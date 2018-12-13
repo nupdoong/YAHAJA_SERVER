@@ -323,6 +323,7 @@ app.get('/random_matching', function(req, res){
         function(callback){
             var post = {match_type : 'billiards', match_status : 'ready', match_member1 : id, match_member2 : partner_id, match_place : match_place};
             var query = connection.query(sqlQuery, post);
+            res.json(null);
         }
     ]);
 });
