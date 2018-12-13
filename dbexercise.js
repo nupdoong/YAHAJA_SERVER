@@ -776,7 +776,7 @@ app.post('/clan_m', function(req, res){
             for(var i = 0; i < rows.length; i++)
             {   
                 var j = i+1;
-                del_c = rows[i].name;
+                del_c = rows[i].clan_name;
                 res.write("	<article class = 'article'> 	");
                 res.write("	<section class = 'section'>	");
                 res.write("	<div class = 'post'>	");
@@ -850,7 +850,7 @@ app.post('/del_fac', function(req, res){
 app.post('/del_clan', function(req, res){
         
 
-    var sqlQuery = "Delete from cm_clan WHERE name = '" + del_c + "';";
+    var sqlQuery = "Delete from cm_clan WHERE clan_name = '" + del_c + "';";
                 function callback(err, result){
                     if(err){
                         console.log("err");
