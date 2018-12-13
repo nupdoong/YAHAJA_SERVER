@@ -292,7 +292,7 @@ app.post('/match_accept', function(req, res){
     async.waterfall([
         function(callback){
             connection.query('select fcm_token from us_custom where account_id = ?', [partner_id], function(err,rows2){
-                const client_token = rows[0].fcm_token;
+                const client_token = rows2[0].fcm_token;
                 callback(null);
             }); 
         },
