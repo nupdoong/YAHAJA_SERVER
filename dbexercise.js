@@ -821,7 +821,7 @@ app.post('/del_user', function(req, res){
                         throw err;
                     }
                     else{
-                        alert('Delete Complete.');
+                        res.render('post.html');
                     }
                 }
                 var query = connection.query(sqlQuery, callback);
@@ -839,7 +839,7 @@ app.post('/del_fac', function(req, res){
                         throw err;
                     }
                     else{
-                        alert('Delete Complete.');
+                        res.render('post.html');
                     }
                 }
                 var query = connection.query(sqlQuery, callback);
@@ -857,7 +857,7 @@ app.post('/del_clan', function(req, res){
                         throw err;
                     }
                     else{
-                        alert('Delete Complete.');
+                        res.render('post.html');
                     }
                 }
                 var query = connection.query(sqlQuery, callback);
