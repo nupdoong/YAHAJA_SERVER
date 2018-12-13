@@ -599,7 +599,7 @@ app.post('/users_m', function(req, res){
 });
 
 app.post('/facility_m', function(req, res){
-    connection.query("SELECT * from fc_billiards where availavility = ?", ['ok'],function(err, rows, fields){
+    connection.query("SELECT * from fc_billiards where availability = ?", ['ok'],function(err, rows, fields){
         if (!err){
             
             res.writeHead(200, {"Content-Type" : "text/html; charset=utf-8"});
