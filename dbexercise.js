@@ -51,14 +51,26 @@ app.post('/register_fc', function(req, res, next) {
     console.log('who get in here post /login');
     var sqlQuery = "INSERT INTO fc_billiards SET ?";
     var post = {name: name, contact: contact, lat: loc_lat, lon: loc_lon, availability: 'yet'};
-    function callback(err, result){
+    
+    
+     async.waterfall([
+        function(callback){
+            function callback(err, result){
                         if(err){
                             console.log(err);
                         }
-    }
-    var query = connection.query(sqlQuery, post, callback);
-    res.write('<script>alert("Request Success!")</script>');
-    res.write('<script language=\"javascript\">window.location=\"http://ec2-13-59-95-38.us-east-2.compute.amazonaws.com:3000/first\"</script>');
+            }
+            var query = connection.query(sqlQuery, post, callback);
+            callback(null);
+            
+        },
+        function(callback){
+            res.write('<script>alert("Request Success!")</script>');
+        res.write('<script language=\"javascript\">window.location=\"http://ec2-13-59-95-38.us-east-2.compute.amazonaws.com:3000/first\"</script>');
+        }
+        
+    ]);
+    
 });
 app.post('/logout', function(req, res){
     res.render('top_manage_first.html');
