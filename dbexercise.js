@@ -459,7 +459,7 @@ app.get('/match_result',function(req,res){
 
 app.get('/get_billiards_rank_clan', function(req, res){
     console.log('who get in here post /clan_rank');
-    var query = connection.query('select clan_name, points from cm_clan', function(err,rows){
+    var query = connection.query('select clan_name, points from cm_clan ORDER BY points DESC', function(err,rows){
         res.json(rows);
     });
 });
