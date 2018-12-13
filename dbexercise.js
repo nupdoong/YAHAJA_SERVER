@@ -30,7 +30,8 @@ app.set('port', 3000);
 app.use('/public',static(path.join(__dirname,'public')));
 
 var del_id;
-
+var del_f;
+var del_c;
 
 app.get('/first', function(req, res, next) {
     res.render('top_manage_first.html');
@@ -665,6 +666,7 @@ app.post('/facility_m', function(req, res){
             for(var i = 0; i < rows.length; i++)
             {   
                 var j = i+1;
+                del_f = rows[i].facility_id;
                 res.write("	<article class = 'article'> 	");
                 res.write("	<section class = 'section'>	");
                 res.write("	<div class = 'post'>	");
@@ -678,7 +680,7 @@ app.post('/facility_m', function(req, res){
                 res.write("<h4 style='margin-left : 15px;'>Loc : " + rows[i].location + "</h4>");
                 res.write("<h4 style='margin-left : 15px;'>Contact : " + rows[i].contact + "</h4>");
                 res.write("<br>")
-                res.write("<form method = 'post' action='/del_user'>");
+                res.write("<form method = 'post' action='/del_fac'>");
                 res.write("<input type = 'submit' value = 'Delete' class='right' name = ''>");
                 res.write("</form>");
                 res.write("</div>");
@@ -774,6 +776,7 @@ app.post('/clan_m', function(req, res){
             for(var i = 0; i < rows.length; i++)
             {   
                 var j = i+1;
+                del_c = rows[i].name;
                 res.write("	<article class = 'article'> 	");
                 res.write("	<section class = 'section'>	");
                 res.write("	<div class = 'post'>	");
@@ -788,7 +791,7 @@ app.post('/clan_m', function(req, res){
                 res.write("<h4 style='margin-left : 15px;'>Clan Type : " + rows[i].type + "</h4>");
                 res.write("<h4 style='margin-left : 15px;'>Established : " + rows[i].established + "</h4>");
                 res.write("<br>")
-                res.write("<form method = 'post' action='/del_user'>");
+                res.write("<form method = 'post' action='/del_clan'>");
                 res.write("<input type = 'submit' value = 'Delete' class='right' name = ''>");
                 res.write("</form>");
                 res.write("</div>");
@@ -818,13 +821,50 @@ app.post('/del_user', function(req, res){
                         throw err;
                     }
                     else{
-                        alert('클랜 탈퇴 완료.');
+                        alert('Delete Complete.');
                     }
                 }
                 var query = connection.query(sqlQuery, callback);
 
           
 });
+
+app.post('/del_fac', function(req, res){
+        
+
+    var sqlQuery = "Delete from rk_billiards WHERE name = '" + del_f + "';";
+                function callback(err, result){
+                    if(err){
+                        console.log("err");
+                        throw err;
+                    }
+                    else{
+                        alert('Delete Complete.');
+                    }
+                }
+                var query = connection.query(sqlQuery, callback);
+
+          
+});
+
+app.post('/del_clan', function(req, res){
+        
+
+    var sqlQuery = "Delete from cm_clan WHERE name = '" + del_c + "';";
+                function callback(err, result){
+                    if(err){
+                        console.log("err");
+                        throw err;
+                    }
+                    else{
+                        alert('Delete Complete.');
+                    }
+                }
+                var query = connection.query(sqlQuery, callback);
+
+          
+});
+
 
 http.createServer(app).listen(app.get('port'),function(){
     console.log("express start : %d ", app.get('port'));
