@@ -832,7 +832,7 @@ app.post('/del_user', function(req, res){
 app.post('/del_fac', function(req, res){
         
 
-    var sqlQuery = "Delete from rk_billiards WHERE name = '" + del_f + "';";
+    var sqlQuery = "Delete from fc_billiards WHERE name = '" + del_f + "';";
                 function callback(err, result){
                     if(err){
                         console.log("err");
