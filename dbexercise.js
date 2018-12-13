@@ -714,7 +714,7 @@ app.post('/facility_m', function(req, res){
 });
 
 app.post('/facility_add', function(req, res){
-    connection.query("SELECT * from fc_billiards where availavility = ?", ['yet'],function(err, rows, fields){
+    connection.query("SELECT * from fc_billiards where availability = ?", ['yet'],function(err, rows, fields){
         if (!err){
             
             res.writeHead(200, {"Content-Type" : "text/html; charset=utf-8"});
