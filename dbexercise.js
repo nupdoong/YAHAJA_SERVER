@@ -55,12 +55,7 @@ app.post('/register_fc', function(req, res, next) {
     
      async.waterfall([
         function(callback){
-            function callback(err, result){
-                        if(err){
-                            console.log(err);
-                        }
-            }
-            var query = connection.query(sqlQuery, post, callback);
+            var query = connection.query(sqlQuery, post);
             callback(null);
             
         },
