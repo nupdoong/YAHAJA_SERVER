@@ -824,7 +824,7 @@ app.post('/del_user', function(req, res){
                         throw err;
                     }
                     else{
-                        res.write('<script>alert("Delete Complete!")</script>');
+                        res.render('post.html');
                     }
                 }
                 var query = connection.query(sqlQuery, callback);
