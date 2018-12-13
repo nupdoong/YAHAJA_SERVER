@@ -527,6 +527,13 @@ app.get('/clans', function(req, res){
     });
 });
 
+app.get('/friends', function(req, res){
+    console.log('who get in here post /friends');
+    var query = connection.query('select * from cm_friend', function(err,rows){
+        res.json(rows);
+    });
+});
+
 app.post('/users_m', function(req, res){
     connection.query("SELECT * from us_custom", function(err, rows, fields){
         if (!err){
