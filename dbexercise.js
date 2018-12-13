@@ -33,6 +33,8 @@ var del_id;
 var del_f;
 var del_c;
 
+var add_f;
+
 app.get('/first', function(req, res, next) {
     res.render('top_manage_first.html');
 });
@@ -593,7 +595,7 @@ app.post('/users_m', function(req, res){
 });
 
 app.post('/facility_m', function(req, res){
-    connection.query("SELECT * from fc_billiards", function(err, rows, fields){
+    connection.query("SELECT * from fc_billiards where availavility = ?", ['ok'],function(err, rows, fields){
         if (!err){
             
             res.writeHead(200, {"Content-Type" : "text/html; charset=utf-8"});
@@ -685,6 +687,120 @@ app.post('/facility_m', function(req, res){
                 res.write("<br>")
                 res.write("<form method = 'post' action='/del_fac'>");
                 res.write("<input type = 'submit' value = 'Delete' class='right' name = ''>");
+                res.write("</form>");
+                res.write("</div>");
+                res.write("</div>");
+                res.write("</section>");
+                res.write("</article>");
+                
+            }
+            res.write("</body>");
+            res.write("</html>");
+            res.end();
+                
+        }
+
+        else
+            console.log('Error while performing Query.', err);
+    });
+});
+
+app.post('/facility_add', function(req, res){
+    connection.query("SELECT * from fc_billiards where availavility = ?", ['yet'],function(err, rows, fields){
+        if (!err){
+            
+            res.writeHead(200, {"Content-Type" : "text/html; charset=utf-8"});
+            res.write("<!DOCTYPE html>");
+            res.write("<html>");
+            res.write("<head>");
+            res.write("<meta charset='utf-8'>");
+            res.write("<title>Clan List</title>");
+            res.write("<link rel='stylesheet' href='/public/css/viewmy.css'>");
+            res.write("	<style>	");
+             res.write("	html{	");
+            res.write("	background-size: cover;	");
+            res.write("	margin : 0;	");
+            res.write("	padding : 0;	");
+            res.write("	overflow-y:scroll;overflow-x:hidden;background-repeat:repeat; background-attachment:fixed;	");
+            res.write("	}	");
+            res.write("	body{	");
+            res.write("	font-family:'맑은 고딕', '고딕', '굴림'; 	");
+            res.write("	margin : 0;	");
+            res.write("	padding : 0;	");
+            res.write("	background-image: url('images/snow12.jpg');	");
+            res.write("	-webkit-animation: snow 20s linear infinite;	");
+            res.write("	-moz-animation: snow 20s linear infinite;	");
+            res.write("	-ms-animation: snow 20s linear infinite;	");
+            res.write("	animation: snow 20s linear infinite;	");
+            res.write("	}	");
+            res.write("	@keyframes snow {	");
+            res.write("	0% {background-position: 0px 0px, 0px 0px, 0px 0px;}	");
+            res.write("	100% {background-position: 500px 1000px, 400px 400px, 300px 300px;}	");
+            res.write("	}	");
+            res.write("	@-moz-keyframes snow {	");
+            res.write("	0% {background-position: 0px 0px, 0px 0px, 0px 0px;}	");
+            res.write("	100% {background-position: 500px 1000px, 400px 400px, 300px 300px;}	");
+            res.write("	} 	");
+            res.write("	@-webkit-keyframes snow {	");
+            res.write("	0% {background-position: 0px 0px, 0px 0px, 0px 0px;}	");
+            res.write("	50% {}	");
+            res.write("	100% {background-position: 500px 1000px, 400px 400px, 300px 300px;}	");
+            res.write("	} 	");
+            res.write("	@-ms-keyframes snow {	");
+            res.write("	0% {background-position: 0px 0px, 0px 0px, 0px 0px;}	");
+            res.write("	100% {background-position: 500px 1000px, 400px 400px, 300px 300px;}	");
+            res.write("	}	");
+            res.write("	</style>	");
+            res.write("</head>");
+            res.write("<body>");
+             res.write("	<header class='head'>	");
+            res.write("	<div class = 'A'>	");
+            res.write("	<div class= 'B'>	");
+            res.write("	<div class='top'>	");
+            res.write("	<img src='images/Nupdoung.jpg' alt='' class = 'image_profile2' style='margin-left : 50px;'>	");
+            res.write("	<img src='images/mark3.jpg' alt='' class = 'image_mark' style='margin-left : 10px;'>	");
+            res.write("	</div>	");
+            res.write('	<div class="top2" >	');
+            res.write("<br>");
+            res.write("<form method = 'post' action='/users_m'>");
+            res.write("<input type = 'submit' value = 'Users' class='right' name = ''>");
+            res.write("</form>");    
+            res.write("<br>");
+            res.write("<form method = 'post' action='/clan_m'>");
+            res.write("<input type = 'submit' value = 'Clans' class='right' name = ''>");
+            res.write("</form>");    
+            res.write("<br>");
+            res.write("<form method = 'post' action='/logout'>");
+            res.write("<input type = 'submit' value = 'Logout' class='right' name = ''>");
+            res.write("</form>");    
+            res.write("<br>");
+            res.write("	</div>	");
+            res.write("	</div>	");
+            res.write("	</div>	");
+            res.write("	</header>	");
+            for(var i = 0; i < rows.length; i++)
+            {   
+                var j = i+1;
+                add_f = rows[0].name;
+                res.write("	<article class = 'article'> 	");
+                res.write("	<section class = 'section'>	");
+                res.write("	<div class = 'post'>	");
+                res.write("	<div class='top'> 	");
+                res.write("</div>");
+                res.write("<div>");
+                res.write("<br><h5>Facility " + j + "</h5>");
+                res.write("</div>");
+                res.write("<div>");
+                res.write("<h4 style='margin-left : 15px;'>Name : " + rows[i].name + "</h4>");
+                res.write("<h4 style='margin-left : 15px;'>Loc_Latitude : " + rows[i].lat + "</h4>");
+                res.write("<h4 style='margin-left : 15px;'>Loc_Longitude : " + rows[i].lon + "</h4>");
+                res.write("<h4 style='margin-left : 15px;'>Contact : " + rows[i].contact + "</h4>");
+                res.write("<br>")
+                res.write("<form method = 'post' action='/accept_fac'>");
+                res.write("<input type = 'submit' value = 'Accept' class='right' name = ''>");
+                res.write("</form>");
+                res.write("<form method = 'post' action='/reject_fac'>");
+                res.write("<input type = 'submit' value = 'Reject' class='right' name = ''>");
                 res.write("</form>");
                 res.write("</div>");
                 res.write("</div>");
@@ -855,6 +971,43 @@ app.post('/del_clan', function(req, res){
 
     var sqlQuery = "Delete from cm_clan WHERE clan_name = '" + del_c + "';";
                 function callback(err, result){
+                    if(err){
+                        console.log("err");
+                        throw err;
+                    }
+                    else{
+                        res.render('post.html');
+                    }
+                }
+                var query = connection.query(sqlQuery, callback);
+
+          
+});
+
+app.post('/accept_fac', function(req, res){
+        
+
+    var sqlQuery = "UPDATE fc_billiards SET ? WHERE name = '" + add_f + "';";
+    var post = {availability: 'ok'};                
+    function callback(err, result){
+                    if(err){
+                        console.log("err");
+                        throw err;
+                    }
+                    else{
+                        res.render('post.html');
+                    }
+                }
+                var query = connection.query(sqlQuery, post, callback);
+
+          
+});
+
+app.post('/reject_fac', function(req, res){
+        
+
+    var sqlQuery = "Delete from fc_billiards WHERE name = '" + add_f + "';";               
+    function callback(err, result){
                     if(err){
                         console.log("err");
                         throw err;
