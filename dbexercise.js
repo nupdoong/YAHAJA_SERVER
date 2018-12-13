@@ -55,6 +55,10 @@ app.post('/register_fc', function(req, res, next) {
                         if(err){
                             console.log(err);
                         }
+        else{
+            res.write('<script>alert("Request Success!")</script>');
+            res.write('<script language=\"javascript\">window.location=\"http://ec2-13-59-95-38.us-east-2.compute.amazonaws.com:3000/first\"</script>');
+        }
     }
     var query = connection.query(sqlQuery, post, callback);
 });
