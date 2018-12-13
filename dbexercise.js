@@ -811,7 +811,7 @@ app.post('/clan_m', function(req, res){
 app.post('/del_user', function(req, res){
         
 
-    var sqlQuery = "Delete from us_custom WHERE id = '" + del_id + "';";
+    var sqlQuery = "Delete from us_custom WHERE account_id = '" + del_id + "';";
                 function callback(err, result){
                     if(err){
                         console.log("err");
