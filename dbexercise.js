@@ -29,6 +29,8 @@ app.engine('html', ejs.renderFile);
 app.set('port', 3000);
 app.use('/public',static(path.join(__dirname,'public')));
 
+var del_id;
+
 
 app.get('/first', function(req, res, next) {
     res.render('top_manage_first.html');
@@ -330,7 +332,7 @@ app.get('/find_match',function(req,res){
 
 app.get('/fc_info',function(req,res){
     const name = req.query.name;
-    console.log('who get in here post /random_fc');
+    console.log('who get in here post /fc_info');
     var query = connection.query('select * from fc_billiards where name = ?', [name], function(err,rows){
         res.json(rows);
     });    
@@ -338,7 +340,7 @@ app.get('/fc_info',function(req,res){
 
 app.get('/partner_contact',function(req,res){
     const partner_id = req.query.partner_id;
-    console.log('who get in here post /random_fc');
+    console.log('who get in here post /partner_contact');
     var query = connection.query('select * from us_custom where account_id = ?', [partner_id], function(err,rows){
         res.json(rows);
     });    
@@ -346,7 +348,7 @@ app.get('/partner_contact',function(req,res){
 
 app.get('/partner_points',function(req,res){
     const partner_id = req.query.partner_id;
-    console.log('who get in here post /random_fc');
+    console.log('who get in here post /partner_points');
     var query = connection.query('select * from rk_billiards where user_account_id = ?', [partner_id], function(err,rows){
         res.json(rows);
     });    
@@ -551,6 +553,7 @@ app.post('/users_m', function(req, res){
             for(var i = 0; i < rows.length; i++)
             {   
                 var j = i+1;
+                del_id = rows[0].account_id;
                 res.write("	<article class = 'article'> 	");
                 res.write("	<section class = 'section'>	");
                 res.write("	<div class = 'post'>	");
@@ -808,7 +811,17 @@ app.post('/clan_m', function(req, res){
 app.post('/del_user', function(req, res){
         
 
-    alert('Delete Complete.');
+    var sqlQuery = "Delete from users WHERE id = '" + del_id + "';";
+                function callback(err, result){
+                    if(err){
+                        console.log("err");
+                        throw err;
+                    }
+                    else{
+                        alert('클랜 탈퇴 완료.');
+                    }
+                }
+                var query = connection.query(sqlQuery, callback);
 
           
 });
