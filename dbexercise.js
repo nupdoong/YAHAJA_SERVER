@@ -39,6 +39,25 @@ app.get('/first', function(req, res, next) {
     res.render('top_manage_first.html');
 });
 
+app.get('/register', function(req, res, next) {
+    res.render('fc_signup.html');
+});
+
+app.post('/register_fc', function(req, res, next) {
+    const name = req.body.name;
+    const loc_lat = req.body.loc_lat;
+    const loc_lon = req.body.loc_lon
+    const contact = req.body.contact
+    console.log('who get in here post /login');
+    var sqlQuery = "INSERT INTO fc_billiards SET ?";
+    var post = {name: name, contact: contact, lat: loc_lat, lon: loc_lon, availability: 'yet'};
+    function callback(err, result){
+                        if(err){
+                            console.log(err);
+                        }
+    }
+    var query = connection.query(sqlQuery, post, callback);
+});
 app.post('/logout', function(req, res){
     res.render('top_manage_first.html');
 });
