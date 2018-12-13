@@ -271,48 +271,6 @@ app.post('/push_location', function(req, res){
     
 });
 
-app.post('/match_accept', function(req, res){
-    const id = req.body.account_id;
-    const partner_id = req.body.partner_id;
-    const serverKey = 'AIzaSyDZF3zh-0_PmYHKxEprFrx4V8AXKB_dQkk';
-    console.log('who get in here post /push_location');
-    var fcm = new FCM(serverKey);
-    var push_data = {
-        to: client_token,
-        notification: {
-            title: "Matching Accept",
-            body: "Matching is Accept!",
-            sound: "default",
-            click_action: "FCM_PLUGIN_ACTIVITY",
-            icon: "fcm_push_icon"
-        }
-
-    };
-    
-    async.waterfall([
-        function(callback){
-            connection.query('select fcm_token from us_custom where account_id = ?', [partner_id], function(err,rows2){
-                const client_token = rows2[0].fcm_token;
-                callback(null);
-            }); 
-        },
-        function(callback){
-            fcm.send(push_data, function(err, response) {
-                        if (err) {
-                            console.error('Push메시지 발송에 실패했습니다.');
-                            console.error(err);
-                            return;
-                        }
-
-                        console.log('Push메시지가 발송되었습니다.');
-                        console.log(response);
-                    });
-                    res.end(JSON.stringify());
-        }
-    ]);
-
-    
-});
 
 
 app.get('/get_location',function(req,res){
