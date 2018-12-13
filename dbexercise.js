@@ -666,7 +666,7 @@ app.post('/facility_m', function(req, res){
             for(var i = 0; i < rows.length; i++)
             {   
                 var j = i+1;
-                del_f = rows[i].facility_id;
+                del_f = rows[i].name;
                 res.write("	<article class = 'article'> 	");
                 res.write("	<section class = 'section'>	");
                 res.write("	<div class = 'post'>	");
@@ -677,7 +677,8 @@ app.post('/facility_m', function(req, res){
                 res.write("</div>");
                 res.write("<div>");
                 res.write("<h4 style='margin-left : 15px;'>Name : " + rows[i].name + "</h4>");
-                res.write("<h4 style='margin-left : 15px;'>Loc : " + rows[i].location + "</h4>");
+                res.write("<h4 style='margin-left : 15px;'>Loc_Latitude : " + rows[i].lat + "</h4>");
+                res.write("<h4 style='margin-left : 15px;'>Loc_Longitude : " + rows[i].lon + "</h4>");
                 res.write("<h4 style='margin-left : 15px;'>Contact : " + rows[i].contact + "</h4>");
                 res.write("<br>")
                 res.write("<form method = 'post' action='/del_fac'>");
