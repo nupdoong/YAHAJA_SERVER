@@ -322,7 +322,7 @@ app.get('/random_matching', function(req, res){
 
 app.get('/find_match',function(req,res){
     const id = req.query.account_id;
-    console.log('who get in here post /random_match');
+    console.log('who get in here post /find_match');
     var query = connection.query('select * from mc_progress where match_member1 = ? OR match_member2 = ?', [id, id], function(err,rows){
         res.json(rows);
     });    
